@@ -27,3 +27,7 @@ t = (np.arange(0,x.shape[0],500) / float(fs)) / 60 # minutes
 ### Plot the wave
 plt.plot(t, xs) # get every 500
 plt.show()
+
+### Plot FFT
+plt.plot(t, np.abs(np.fft.fft(xs)))
+plt.show()

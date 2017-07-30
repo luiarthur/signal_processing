@@ -31,3 +31,60 @@ plt.show()
 ### Plot FFT
 plt.plot(t, np.abs(np.fft.fft(xs)))
 plt.show()
+
+### Blackman Window.
+window = signal.blackman(50)
+plt.figure()
+A = np.fft.fft(window, 4096) / (len(window) / 2.0)
+f = np.linspace(-.5, .5, len(A))
+response = 20 * np.log10(np.abs(np.fft.fftshift(A / abs(A).max())) + 1E-6)
+plt.plot(f, response)
+plt.show()
+
+### Plot Spectrogram
+from scipy import signal
+#xm = x[:,0]
+xm = np.mean(x, 1)
+N = xm.size
+window = signal.blackman(4096)
+f, t, Sxx = signal.spectrogram(xm, fs, window=window)
+#plt.pcolormesh(t, f, np.power(Sxx, .25))
+
+THRESH_MAX = 50000
+THRESH_MIN = 20000
+
+#trans = np.vectorize(lambda s: THRESH_MAX if s > THRESH_MAX else s)
+trans = np.vectorize(lambda s: 1 if s > THRESH_MIN else 0)
+tS = trans(Sxx)
+plt.pcolormesh(t, f, tS)
+plt.ylabel('Frequency [Hz]')
+plt.xlabel('Time [sec]')
+plt.ylim([0,4400])
+plt.show()
+
+Sxx.shape
+
+### ID Predominant Pitches
+from notes import pitch
+pitch = np.vectorize(pitch)
+M = np.argwhere(tS == 1)
+pitches = pitch(f[M[:,0]])
+seconds = t[M[:,1]]
+
+order = np.argsort(seconds)
+pitches[order]
+seconds[order]
+
+from itertools import groupby
+from operator import itemgetter
+
+W = np.stack( (seconds[order], pitches[order]) ).T
+
+d = {}
+for w in W:
+    w0 = float(w[0])
+    if d.has_key(w0): d[w0] += [w[1]]
+    else: d[w0] = [w[1]]
+
+
+l = map(lambda k: (k,d[k]), sorted(d.keys()))

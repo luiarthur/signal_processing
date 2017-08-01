@@ -52,18 +52,18 @@ window = signal.blackman(4096)
 f, t, Sxx = signal.spectrogram(xm, fs, window=window)
 
 ### Truncate at max frequency
-F_MAX = 4400
-f_imax = np.argmin(f <= F_MAX)
-f = f[:f_imax]
-Sxx = Sxx[:f_imax,:]
+#F_MAX = 4400
+#f_imax = np.argmin(f <= F_MAX)
+#f = f[:f_imax]
+#Sxx = Sxx[:f_imax,:]
 #plt.pcolormesh(t, f, np.power(Sxx, .25))
 
 THRESH_MAX = 50000
 THRESH_MIN = 30000
 
 #trans = np.vectorize(lambda s: THRESH_MAX if s > THRESH_MAX else s)
-#trans = np.vectorize(lambda s: 1 if s > THRESH_MIN else 0)
-trans = np.vectorize(lambda s: s)
+#trans = np.vectorize(lambda s: s)
+trans = np.vectorize(lambda s: 1 if s > THRESH_MIN else 0)
 tS = trans(Sxx)
 plt.pcolormesh(t, f, tS)
 plt.ylabel('Frequency [Hz]')

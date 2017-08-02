@@ -1,62 +1,44 @@
 import os
 import numpy as np
 from scipy.io import wavfile
+from scipy import signal
 import matplotlib.pyplot as plt
 
 HOME = os.path.expanduser('~')
 
 ### Read a wavfile
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
+if x.ndim > 1: x = x[:,1]
+
+N = x.shape[0]
 
 ### Write a wavfile
 #wavfile.write('bla.wav', fs, y)
 
 ### Get the duration of the file
-seconds_duration_of_file = x.shape[0] / float(fs) 
+seconds_duration_of_file = N / float(fs) 
 
 ### Get the 
 x.shape # 2 columns because stereo (L, R)
 
-#### Sampled Wave (every 500)
-#every = 500
-#xs = x[::every,0]
-#
 #### Get the time index (also sampled every 500)
-#t = (np.arange(0,x.shape[0],every) / float(fs)) / 60 # minutes
+t = (np.arange(0, N) / float(fs)) / 60 # minutes
 
 
 ### Plot the wave
-#plt.plot(t, xs) # get every 500
-#plt.show()
+
+plt.plot(t, x) # get every 500
+plt.show()
 
 ### Plot FFT
 #plt.plot(t, np.abs(np.fft.fft(xs)))
 #plt.show()
 
 ### Blackman Window.
-from scipy import signal
-#window = signal.blackman(50)
-#plt.figure()
-#A = np.fft.fft(window, 4096) / (len(window) / 2.0)
-#f = np.linspace(-.5, .5, len(A))
-#response = 20 * np.log10(np.abs(np.fft.fftshift(A / abs(A).max())) + 1E-6)
-##response = 20 * np.log10(np.abs(np.fft.fftshift(A)) / np.abs(abs(A)).max() + 1E-6)
-#plt.plot(f, response)
-#plt.show()
 
 ### Plot Spectrogram
-#xm = x[:,0]
-xm = np.mean(x, 1)
-N = xm.size
 window = signal.blackman(4096)
-f, t, Sxx = signal.spectrogram(xm, fs, window=window)
-
-### Truncate at max frequency
-#F_MAX = 4400
-#f_imax = np.argmin(f <= F_MAX)
-#f = f[:f_imax]
-#Sxx = Sxx[:f_imax,:]
-#plt.pcolormesh(t, f, np.power(Sxx, .25))
+f, t, Sxx = signal.spectrogram(x, fs, window=window)
 
 THRESH_MAX = 50000
 THRESH_MIN = 30000

@@ -5,6 +5,8 @@ version := "0.1.0"
 scalaVersion := "2.11.8"
 
 libraryDependencies ++= Seq(
+  // javax (read media)
+  "javax" % "javaee-api" % "7.0" % "provided",
   // Breeze (Numeric Lib)
   "org.scalanlp" %% "breeze" % "0.13.2",
   "org.scalanlp" %% "breeze-natives" % "0.13.2",

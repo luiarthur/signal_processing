@@ -40,12 +40,25 @@ Z = np.log(Zxx / Zxx.max())
 p = pitch(f + 1E-6)
 
 ### Time Chunk
-tt = 1000
+#tt = 1000
+tt = 500
 
 ### Plot spectrogram at time tt:
-plt.plot(f, np.exp(Z[:, tt]))
-#plt.xticks(np.linspace(27, 4187, 88), p_set.tolist(), rotation=90)
+
+### Normalized
+#z = np.exp(Z[:,tt] - Z[:,tt].max()) / np.exp(Z[:,tt] - Z[:,tt].max()).sum()
+#plt.plot(f, z)
+#plt.show()
+
+### Scaled to 0,1
+z = np.exp(Z[:,tt] - Z[:,tt].max())
+plt.plot(f, z)
 plt.show()
+
+### UnNormalized
+#plt.plot(f, np.exp(Z[:, tt]))
+#plt.xticks(np.linspace(27, 4187, 88), p_set.tolist(), rotation=90)
+#plt.show()
 
 
 d = {}
@@ -76,7 +89,9 @@ order = np.argsort(idx)
 
 ### Pitch Detection with Keyboard Notes at bottom
 #plt.figure(figsize=(20,10))
-plt.plot(range(len(idx)), np.exp(a0)[order])
+#zz = np.array(a0)[order]
+#plt.plot(range(len(idx)), np.exp(zz))
+plt.plot(range(len(idx)), np.exp(zz-zz.max()))
 #plt.ylim([-10,0])
 plt.xticks(range(89), [''] + p_set.tolist(), rotation=90)
 plt.tight_layout()

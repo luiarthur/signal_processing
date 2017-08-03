@@ -3,6 +3,9 @@ import numpy as np
 from scipy.io import wavfile
 from scipy import signal
 import matplotlib.pyplot as plt
+from notes import pitch
+### Find unique elements in list (maintaining original order)
+from collections import OrderedDict
 
 HOME = os.path.expanduser('~')
 
@@ -10,75 +13,60 @@ HOME = os.path.expanduser('~')
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
 if x.ndim > 1: x = x[:,1]
 
-N = x.shape[0]
+#w_size = 2048
+w_size = 4096
+f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', w_size))
 
-### Write a wavfile
-#wavfile.write('bla.wav', fs, y)
+F_MAX = 4200
+f_imax = np.argmin(f <= F_MAX)
+f = f[:f_imax]
+Zxx = Zxx[:f_imax,:]
+Z = np.log(Zxx / Zxx.max())
 
-### Get the duration of the file
-seconds_duration_of_file = N / float(fs) 
-
-### Get the 
-x.shape # 2 columns because stereo (L, R)
-
-#### Get the time index (also sampled every 500)
-t = (np.arange(0, N) / float(fs)) / 60 # minutes
-
-
-### Plot the wave
-
-plt.plot(t, x) # get every 500
-plt.show()
-
-### Plot FFT
-#plt.plot(t, np.abs(np.fft.fft(xs)))
-#plt.show()
-
-### Blackman Window.
-
-### Plot Spectrogram
-window = signal.blackman(4096)
-f, t, Sxx = signal.spectrogram(x, fs, window=window)
-
-THRESH_MAX = 50000
-THRESH_MIN = 30000
-
-#trans = np.vectorize(lambda s: THRESH_MAX if s > THRESH_MAX else s)
-#trans = np.vectorize(lambda s: s)
-trans = np.vectorize(lambda s: 1 if s > THRESH_MIN else 0)
-tS = trans(Sxx)
-plt.pcolormesh(t, f, tS)
+plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
+plt.title('STFT Magnitude')
 plt.ylabel('Frequency [Hz]')
-plt.xlabel('Time [sec]')
 plt.ylim([0, 4400])
+plt.xlabel('Time [sec]')
 plt.show()
 
-Sxx.shape
+### Pitch at freq
+p = pitch(f + 1E-6)
+p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
 
-### ID Predominant Pitches
-from notes import pitch
-pitch = np.vectorize(pitch)
-M = np.argwhere(tS == 1)
-pitches = pitch(f[M[:,0]])
-seconds = t[M[:,1]]
-
-order = np.argsort(seconds)
-pitches[order]
-seconds[order]
-
-from itertools import groupby
-from operator import itemgetter
-
-W = zip(*(seconds[order], pitches[order]))
+### Time Chunk
+tt = 4000
 
 d = {}
-for w in W:
-    w0 = float(w[0])
-    w1 = w[1]
-    if d.has_key(w0): d[w0].add(w1)
-    else: d[w0] = set([w1])
+for z in zip(p, Z[:,tt]):
+    if d.has_key(z[0]): d[z[0]] += [z[1]]
+    else: d[z[0]] = [z[1]]
+
+def compI(k):
+    trans = map(lambda dk: -np.inf if dk < -10 else dk, d[k])
+    return np.mean(trans)
 
 
-l = map(lambda k: (k,d[k]), sorted(d.keys()))
-s = filter(lambda x: 164.5 < x < 165.5, d.keys())
-map(lambda k: d[k], s)
+p0, a0 = zip(*map(lambda k: (k,compI(k)), d))
+
+### Plot spectrogram:
+plt.plot(f, np.exp(Z[:, tt]))
+plt.show()
+
+def find_pos(k):
+    pos = np.argwhere(p_set == k)
+    if pos.shape[0] == 0:
+        return 0
+    else:
+        return np.asscalar(pos) + 1
+
+idx = map(find_pos, d)
+order = np.argsort(idx)
+
+plt.figure(figsize=(20,10))
+plt.plot(range(len(idx)), np.exp(a0)[order])
+#plt.ylim([-10,0])
+plt.xticks(range(89), [''] + p_set.tolist(), rotation=45)
+plt.tight_layout()
+plt.show()
+

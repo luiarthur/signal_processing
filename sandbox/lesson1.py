@@ -75,7 +75,7 @@ Sxx.shape
 
 ### ID Predominant Pitches
 from notes import pitch
-pitch = np.vectorize(pitch)
+#pitch = np.vectorize(pitch)
 M = np.argwhere(tS == 1)
 pitches = pitch(f[M[:,0]])
 seconds = t[M[:,1]]

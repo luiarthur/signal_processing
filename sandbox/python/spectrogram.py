@@ -18,6 +18,7 @@ if x.ndim > 1: x = x[:,1]
 
 #w_size = 2048
 w_size = 4096
+#w_size = 4096 * 4
 f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', w_size))
 
 F_MAX = 4188
@@ -39,7 +40,7 @@ Z = np.log(Zxx / Zxx.max())
 p = pitch(f + 1E-6)
 
 ### Time Chunk
-tt = 4000
+tt = 1000
 
 ### Plot spectrogram at time tt:
 plt.plot(f, np.exp(Z[:, tt]))

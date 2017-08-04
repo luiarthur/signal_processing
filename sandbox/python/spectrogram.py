@@ -1,3 +1,5 @@
+#import wave
+
 import os
 import numpy as np
 from scipy.io import wavfile
@@ -29,12 +31,12 @@ Zxx = Zxx[:f_imax,:]
 Z = np.log(Zxx / Zxx.max())
 
 ### Plot Spectrogram
-plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
-plt.title('STFT Magnitude')
-plt.ylabel('Frequency [Hz]')
-plt.ylim([0, 4400])
-plt.xlabel('Time [sec]')
-plt.show()
+#plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
+#plt.title('STFT Magnitude')
+#plt.ylabel('Frequency [Hz]')
+#plt.ylim([0, 4400])
+#plt.xlabel('Time [sec]')
+#plt.show()
 
 def getTimeChunk(s, t):
     return np.argmin( np.abs(t - s) )

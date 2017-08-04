@@ -89,7 +89,7 @@ order = np.argsort(idx)
 
 ### Pitch Detection with Keyboard Notes at bottom
 #plt.figure(figsize=(20,10))
-#zz = np.array(a0)[order]
+zz = np.array(a0)[order]
 #plt.plot(range(len(idx)), np.exp(zz))
 plt.plot(range(len(idx)), np.exp(zz-zz.max()))
 #plt.ylim([-10,0])

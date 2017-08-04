@@ -13,12 +13,13 @@ HOME = os.path.expanduser('~')
 p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
 
 ### Read a wavfile
-(fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
+(fs, x) = wavfile.read(HOME+"/wav/embraceableYou_mono.wav")
 if x.ndim > 1: x = x[:,1]
 
 #w_size = 2048
-w_size = 4096
+#w_size = 4096 * 2
 #w_size = 4096 * 4
+w_size = 4096 
 f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', w_size))
 
 F_MAX = 4188
@@ -28,12 +29,15 @@ Zxx = Zxx[:f_imax,:]
 Z = np.log(Zxx / Zxx.max())
 
 ### Plot Spectrogram
-#plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
-#plt.title('STFT Magnitude')
-#plt.ylabel('Frequency [Hz]')
-#plt.ylim([0, 4400])
-#plt.xlabel('Time [sec]')
-#plt.show()
+plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
+plt.title('STFT Magnitude')
+plt.ylabel('Frequency [Hz]')
+plt.ylim([0, 4400])
+plt.xlabel('Time [sec]')
+plt.show()
+
+def getTimeChunk(s, t):
+    return np.argmin( np.abs(t - s) )
 
 
 ### Pitch at freq
@@ -41,7 +45,9 @@ p = pitch(f + 1E-6)
 
 ### Time Chunk
 #tt = 1000
-tt = 500
+#tt = 500
+tt = getTimeChunk(14.8, t)
+#tt = getTimeChunk(15, t)
 
 ### Plot spectrogram at time tt:
 
@@ -62,9 +68,14 @@ plt.show()
 
 
 d = {}
+for k in p_set:
+    d[k] = []
+
 for z in zip(p, Z[:,tt]):
     if d.has_key(z[0]): d[z[0]] += [z[1]]
-    else: d[z[0]] = [z[1]]
+
+for k in d:
+    if d[k] == []: d[k] = [-np.inf]
 
 def compI(k):
     #trans = map(lambda dk: -np.inf if dk < -10 else dk, d[k])
@@ -86,14 +97,24 @@ def find_pos(k):
 
 idx = map(find_pos, d)
 order = np.argsort(idx)
+zz = np.array(a0)[order]
+
+thresh = .3
+norm_z = np.exp(zz - zz.max())
+note_idx =  np.argwhere( norm_z > thresh).T[0]
+note_guess = p_set[ note_idx ]
 
 ### Pitch Detection with Keyboard Notes at bottom
 #plt.figure(figsize=(20,10))
-zz = np.array(a0)[order]
 #plt.plot(range(len(idx)), np.exp(zz))
-plt.plot(range(len(idx)), np.exp(zz-zz.max()))
+plt.plot(range(len(idx)), norm_z)
 #plt.ylim([-10,0])
-plt.xticks(range(89), [''] + p_set.tolist(), rotation=90)
+plt.xticks(range(88), p_set.tolist(), rotation=90)
+
+for i in note_idx:
+    plt.axvline(x=i, color='orange')
+
 plt.tight_layout()
 plt.show()
+
 

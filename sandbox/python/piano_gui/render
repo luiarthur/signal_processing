@@ -1,0 +1,4 @@
+#!/bin/bash
+
+pyuic4 pianoForm.ui > pianoForm.py
+python piano_gui.py

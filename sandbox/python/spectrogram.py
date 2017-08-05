@@ -5,7 +5,7 @@ import numpy as np
 from scipy.io import wavfile
 from scipy import signal
 import matplotlib.pyplot as plt
-from notes import pitch
+from notes import pitch, piano_freq
 ### Find unique elements in list (maintaining original order)
 from collections import OrderedDict
 
@@ -13,6 +13,8 @@ HOME = os.path.expanduser('~')
 
 ### Pitch Sets
 p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
+f_set = np.linspace(27.5, 4186, num=88)
+# p_set = pitch(f_set)
 
 ### Read a wavfile
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou_mono.wav")
@@ -60,6 +62,7 @@ tt = getTimeChunk(14.8, t)
 
 ### Scaled to 0,1
 z = np.exp(Z[:,tt] - Z[:,tt].max())
+#z = np.exp( np.log(Zxx[:,tt]) - np.log(Zxx[:,tt].max()) )
 plt.plot(f, z)
 plt.show()
 
@@ -119,4 +122,27 @@ for i in note_idx:
 plt.tight_layout()
 plt.show()
 
+### Movie
+from matplotlib.animation import FuncAnimation
+
+fig, ax = plt.subplots()
+ln, = plt.plot([], [], animated=True)
+title = ax.text(.8, .95, '', transform = ax.transAxes, va='center')
+
+def init():
+    ax.set_xlim(0, f.max()+100)
+    ax.set_ylim(0, 1.1)
+    return [ln, title]
+
+def update(i):
+    ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx[:,i].max()) )
+    ln.set_data(f, ydata)
+    title.set_text("time: " + str(np.round(t[i],2)) + "s")
+    return [title, ln]
+
+ani = FuncAnimation(fig, update, frames=range(t.size),
+                    init_func=init, blit=True, repeat=False)
+
+plt.xticks(f_set, p_set, rotation=90)
+plt.show()
 

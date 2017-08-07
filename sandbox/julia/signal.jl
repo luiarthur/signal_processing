@@ -8,16 +8,25 @@ Pkg.build("PyCall")
 Pkg.add("PyPlot")
 =#
 
-using WAV
+using WAV, DSP
+
+using Plots
+plotly() # Choose the Plotly.jl backend for web interactivity
 
 # Loading and plotting an audio signal
 @time s, fs = wavread("/Users/lui9/wav/embraceableYou.wav");
+
+fft_s = fft(s)
+ps = Periodograms.spectrogram(s[:,1])
 
 size(s)
 
 # Plot
 #plot(0:1/fs:(length(s)-1)/fs, s)
 #xlabel("Time [s]")
+#plot(rand(5,5),linewidth=2,title="My Plot")
+plot(ps.power, linewidth=2, title="My Plot")
+# PLOT HEATMAP?
 
 
 ### BLINK GUI in browser

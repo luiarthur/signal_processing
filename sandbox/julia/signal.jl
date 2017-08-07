@@ -17,7 +17,7 @@ plotly() # Choose the Plotly.jl backend for web interactivity
 @time s, fs = wavread("/Users/lui9/wav/embraceableYou.wav");
 
 fft_s = fft(s)
-ps = Periodograms.spectrogram(s[:,1])
+ps = spectrogram(s[:,1], 4096)
 
 size(s)
 
@@ -25,7 +25,7 @@ size(s)
 #plot(0:1/fs:(length(s)-1)/fs, s)
 #xlabel("Time [s]")
 #plot(rand(5,5),linewidth=2,title="My Plot")
-plot(ps.power, linewidth=2, title="My Plot")
+heatmap(ps.power)
 # PLOT HEATMAP?
 
 

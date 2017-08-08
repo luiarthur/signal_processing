@@ -143,7 +143,7 @@ def update(i):
     title.set_text("time: " + str(np.round(t[i],2)) + "s")
     return [title, ln]
 
-delay = (t[1:] - t[:-1]).mean() * 5000
+delay = (t[1:] - t[:-1]).mean() * 1000
 
 ani = FuncAnimation(fig, update, frames=range(t.size),
                     init_func=init, blit=True, repeat=False, interval=delay)

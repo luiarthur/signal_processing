@@ -21,3 +21,4 @@ resolvers += Opts.resolver.sonatypeSnapshots
 
 // Allows multiple runs within an sbt session
 fork in run := true
+

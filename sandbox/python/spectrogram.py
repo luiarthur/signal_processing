@@ -12,9 +12,9 @@ from collections import OrderedDict
 HOME = os.path.expanduser('~')
 
 ### Pitch Sets
-p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
-f_set = np.linspace(27.5, 4186, num=88)
-# p_set = pitch(f_set)
+#p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
+f_set = piano_freq #np.linspace(27.5, 4186, num=88)
+p_set = pitch(f_set)
 
 ### Read a wavfile
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
@@ -85,6 +85,7 @@ for k in d:
 def compI(k):
     #trans = map(lambda dk: -np.inf if dk < -10 else dk, d[k])
     trans = d[k]
+    #return np.min(trans)
     #return np.max(trans)
     #return np.mean(trans)
     return np.median(trans)
@@ -129,21 +130,34 @@ from matplotlib.animation import FuncAnimation
 fig, ax = plt.subplots()
 ln, = plt.plot([], [], animated=True)
 title = ax.text(.8, .95, '', transform = ax.transAxes, va='center')
+plt.xticks(np.log(f_set), p_set, rotation=90)
 
 def init():
-    ax.set_xlim(0, f.max()+100)
+    ax.set_xlim(np.log(f_set[0])-.1, np.log(f_set[-1])+.1)
     ax.set_ylim(0, 1.1)
     return [ln, title]
 
 def update(i):
     ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx[:,i].max()) )
-    ln.set_data(f, ydata)
+    ln.set_data(np.log(f), ydata)
     title.set_text("time: " + str(np.round(t[i],2)) + "s")
     return [title, ln]
 
-ani = FuncAnimation(fig, update, frames=range(t.size),
-                    init_func=init, blit=True, repeat=False)
+delay = (t[1:] - t[:-1]).mean() * 5000
 
-plt.xticks(f_set, p_set, rotation=90)
+ani = FuncAnimation(fig, update, frames=range(t.size),
+                    init_func=init, blit=True, repeat=False, interval=delay)
+
+#anim_running = True
+
+#def onClick(event):
+#    global anim_running
+#    if anim_running:
+#        anim.event_source.stop()
+#        anim_running = False
+#    else:
+#        anim.event_source.start()
+#        anim_running = True
+
 plt.show()
 

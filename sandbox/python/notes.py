@@ -22,7 +22,7 @@ with open("piano_freq.txt") as f:
     f.close()
 
 piano_freq.reverse()
-print pitch(piano_freq)
+#print pitch(piano_freq)
 assert len(set(pitch(piano_freq))) == len(pitch(piano_freq)) == 88
 
 

@@ -1,14 +1,16 @@
 import numpy as np
 
-A4 = 440
+A4 = 440.0
 C0 = A4*pow(2, -4.75)
-name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+#name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
+name = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
     
 ### NOT CORRECT!!!
 def pitch_unvec(freq):
-    h = int(12 * np.log2(freq/C0))
-    octave = h // 12
-    n = h % 12
+    h = 12 * np.log(freq/A4) / np.log(2)
+    octave = int(round(h) // 12 + 4)
+    n = int(round(h % 12))
+    n = n if n < 12 else 0
     return name[n] + str(octave)
 
 pitch = np.vectorize(pitch_unvec)
@@ -20,9 +22,14 @@ with open("piano_freq.txt") as f:
     f.close()
 
 piano_freq.reverse()
+print pitch(piano_freq)
+assert len(set(pitch(piano_freq))) == len(pitch(piano_freq)) == 88
+
 
 #pitch(559)
 
 ### All the pitches on piano
 #from collections import OrderedDict
 #p_set = pitch(np.arange(28,4188))
+
+

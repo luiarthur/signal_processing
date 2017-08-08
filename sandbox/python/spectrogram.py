@@ -17,7 +17,7 @@ f_set = np.linspace(27.5, 4186, num=88)
 # p_set = pitch(f_set)
 
 ### Read a wavfile
-(fs, x) = wavfile.read(HOME+"/wav/embraceableYou_mono.wav")
+(fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
 if x.ndim > 1: x = x[:,1]
 
 #w_size = 2048
@@ -104,7 +104,7 @@ idx = map(find_pos, d)
 order = np.argsort(idx)
 zz = np.array(a0)[order]
 
-thresh = .3
+thresh = .2
 norm_z = np.exp(zz - zz.max())
 note_idx =  np.argwhere( norm_z > thresh).T[0]
 note_guess = p_set[ note_idx ]
@@ -115,6 +115,7 @@ note_guess = p_set[ note_idx ]
 plt.plot(range(len(idx)), norm_z)
 #plt.ylim([-10,0])
 plt.xticks(range(88), p_set.tolist(), rotation=90)
+plt.axhline(y=thresh, color='grey')
 
 for i in note_idx:
     plt.axvline(x=i, color='orange')

@@ -5,7 +5,6 @@ C0 = A4*pow(2, -4.75)
 #name = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 name = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
     
-### NOT CORRECT!!!
 def pitch_unvec(freq):
     h = 12 * np.log(freq/A4) / np.log(2)
     octave = int(round(h) // 12 + 4)
@@ -25,6 +24,10 @@ piano_freq.reverse()
 #print pitch(piano_freq)
 assert len(set(pitch(piano_freq))) == len(pitch(piano_freq)) == 88
 
+freq_dict = dict()
+piano_pitches = pitch(piano_freq)
+for i in range(88):
+    freq_dict[piano_pitches[i]] = piano_freq[i]
 
 #pitch(559)
 

@@ -11,18 +11,34 @@ HOME = os.path.expanduser('~')
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
 if x.ndim > 1: x = x[:,1]
 
+
 w_size = 4096
 f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))
 f, t, Zxx = bin_spec(f, t, Zxx)
 
 ### Plot Spectrogram
-plt.pcolormesh(t, f, Zxx, vmin=.0001, vmax=.0005)
+plt.pcolormesh(t, f, Zxx, vmin=.0001, vmax=.0005, cmap=plt.cm.gist_heat)
 plt.title('STFT Magnitude')
 plt.ylabel('Frequency [Hz]')
 plt.ylim([0, 4200])
 plt.xlabel('Time [sec]')
 plt.yticks(f, pitch(f))
 plt.show()
+
+### Plot Spectrogram built-in
+#Pxx, freqs, bins, im = plt.specgram(x, NFFT=w_size, Fs=fs, noverlap=100, cmap=plt.cm.gist_heat)
+#plt.ylim([0, 4200])
+#plt.show() 
+
+### Plot Spectrogram built-in (2)
+#np.mean(  np.exp(np.log(Pxx) - np.log(Pxx.max())) < .001 )
+#plt.pcolormesh(bins, freqs, np.exp(np.log(Pxx) - np.log(Pxx.max())), cmap=plt.cm.gist_heat, vmin=.00001, vmax=.0001)
+#plt.title('STFT Magnitude')
+#plt.ylabel('Frequency [Hz]')
+#plt.ylim([0, 4200])
+#plt.xlabel('Time [sec]')
+#plt.yticks(f, pitch(f))
+#plt.show()
 
 
 ### Movie

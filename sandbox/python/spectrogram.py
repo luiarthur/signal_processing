@@ -5,11 +5,13 @@ import numpy as np
 from scipy.io import wavfile
 from scipy import signal
 import matplotlib.pyplot as plt
-from notes import pitch, piano_freq
+from notes import pitch, piano_freq, freq_dict, bin_spec
 ### Find unique elements in list (maintaining original order)
 from collections import OrderedDict
 
 HOME = os.path.expanduser('~')
+
+
 
 ### Pitch Sets
 #p_set = np.array(list(OrderedDict.fromkeys( pitch(np.arange(28,4188)) ))) 
@@ -25,20 +27,21 @@ if x.ndim > 1: x = x[:,1]
 #w_size = 4096 * 4
 w_size = 4096 
 f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', w_size))
+f, t, Zxx = bin_spec(f, t, Zxx)
 
-F_MAX = 4188
-f_imax = np.argmin(f <= F_MAX)
-f = f[:f_imax]
-Zxx = Zxx[:f_imax,:]
-Z = np.log(Zxx / Zxx.max())
+#F_MAX = 4188
+#f_imax = np.argmin(f <= F_MAX)
+#f = f[:f_imax]
+#Zxx = Zxx[:f_imax,:]
+#Z = np.log(Zxx / Zxx.max())
 
 ### Plot Spectrogram
-#plt.pcolormesh(t, f, Z, vmin=-10, vmax=0)
-#plt.title('STFT Magnitude')
-#plt.ylabel('Frequency [Hz]')
-#plt.ylim([0, 4400])
-#plt.xlabel('Time [sec]')
-#plt.show()
+plt.pcolormesh(t, f, Zxx, vmin=.0001, vmax=.0005)
+plt.title('STFT Magnitude')
+plt.ylabel('Frequency [Hz]')
+plt.ylim([0, 4200])
+plt.xlabel('Time [sec]')
+plt.show()
 
 def getTimeChunk(s, t):
     return np.argmin( np.abs(t - s) )
@@ -136,13 +139,15 @@ def init():
     ax.set_xlim(np.log(f_set[0])-.1, np.log(f_set[-1])+.1)
     #ax.set_ylim(0, 1.1)
     #ax.set_ylim(0, .01)
-    ax.set_ylim(0, 1.1)
+    #ax.set_ylim(0, 1.1)
+    ax.set_ylim(0, .001)
     return [ln, title]
 
 def update(i):
     #ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx[:,i].max()) )
     #ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx.max()) )
-    ydata = np.exp( np.log(Zxx[:,i]) - np.log(10000) )
+    #ydata = np.exp( np.log(Zxx[:,i]) - np.log(10000) )
+    ydata = Zxx[:,i]
     ln.set_data(np.log(f), ydata)
     title.set_text("time: " + str(np.round(t[i],2)) + "s")
     return [title, ln]

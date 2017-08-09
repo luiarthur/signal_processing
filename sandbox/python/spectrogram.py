@@ -134,11 +134,15 @@ plt.xticks(np.log(f_set), p_set, rotation=90)
 
 def init():
     ax.set_xlim(np.log(f_set[0])-.1, np.log(f_set[-1])+.1)
+    #ax.set_ylim(0, 1.1)
+    #ax.set_ylim(0, .01)
     ax.set_ylim(0, 1.1)
     return [ln, title]
 
 def update(i):
-    ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx[:,i].max()) )
+    #ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx[:,i].max()) )
+    #ydata = np.exp( np.log(Zxx[:,i]) - np.log(Zxx.max()) )
+    ydata = np.exp( np.log(Zxx[:,i]) - np.log(10000) )
     ln.set_data(np.log(f), ydata)
     title.set_text("time: " + str(np.round(t[i],2)) + "s")
     return [title, ln]

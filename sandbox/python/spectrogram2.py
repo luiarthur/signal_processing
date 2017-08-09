@@ -20,6 +20,7 @@ plt.title('STFT Magnitude')
 plt.ylabel('Frequency [Hz]')
 plt.ylim([0, 4200])
 plt.xlabel('Time [sec]')
+plt.yticks(f, pitch(f))
 plt.show()
 
 
@@ -31,7 +32,8 @@ thresh = .0005
 fig, ax = plt.subplots()
 ln, = plt.plot([], [], animated=True)
 title = ax.text(.8, .95, '', transform = ax.transAxes, va='center')
-plt.xticks(np.log(piano_freq), pitch(piano_freq), rotation=90)
+#plt.xticks(np.log(piano_freq), pitch(piano_freq), rotation=90)
+plt.xticks(np.log(f), pitch(f), rotation=90)
 plt.axhline(y=thresh, color='grey')
 
 def init():

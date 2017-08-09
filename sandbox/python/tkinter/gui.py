@@ -7,15 +7,11 @@ class Application(tk.Frame):
         print "hi there, everyone!"
 
     def createWidgets(self):
-        self.QUIT = tk.Button(self, text='Quit', fg='red')
+        self.quitBtn = tk.Button(self, text='Quit', fg='red', command=self.quit)
+        #self.quitBtn["command"] = self.quit # is an alternative
+        self.quitBtn.pack({"side": "left"})
 
-        self.QUIT["command"] =  self.quit
-        self.QUIT.pack({"side": "left"})
-
-        self.hi_there = tk.Button(self)
-        self.hi_there["text"] = "Hello"
-        self.hi_there["command"] = self.say_hi
-
+        self.hi_there = tk.Button(self, text='Hello', command=self.say_hi)
         self.hi_there.pack({"side": "left"})
         self.configure(background='blue')
 

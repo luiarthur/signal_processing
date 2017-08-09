@@ -22,11 +22,14 @@ follow these instructions to install on Ubuntu:
 - Remove the two `tar.gz`'s
 
 # To Do:
-Draw interactive piano keyboard on [SVG canvas][4].
+- Draw interactive piano keyboard on [SVG canvas][4].
 
 # Alternative GUI development for PyQT
 
-Try [this][3]
+- Try [this][3]
+
+# Other Things
+- Try using Bokeh server.
 
 
 [1]: http://www.riverbankcomputing.com/software/sip/download

@@ -4,6 +4,8 @@ from scipy.io import wavfile
 from scipy import signal
 import matplotlib.pyplot as plt
 from notes import pitch, piano_freq, freq_dict, bin_spec
+import bokeh.plotting as bplt #import figure, show, output_file
+
 
 HOME = os.path.expanduser('~')
 
@@ -15,6 +17,14 @@ if x.ndim > 1: x = x[:,1]
 w_size = 4096
 f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))
 f, t, Zxx = bin_spec(f, t, Zxx)
+
+### Plot Spectrogram with bokeh
+# must give a vector of image data for image parameter
+#p = bplt.figure(x_range=(t.min(),t.max()), y_range=(f.min(), f.max()), x_axis_label='time', y_axis_label='Frequency')
+p = bplt.figure(x_range=(t.min(),t.max()), y_range=(np.log(f.min()+1E-6), np.log(f.max())), x_axis_label='time', y_axis_label='Frequency')
+p.image(image=[np.clip(Zxx, .0001, .0005)], x=0, y=0, dw=t.max(), dh=np.log(f.max()), palette="Spectral11")
+bplt.output_file("html/image.html", title="image.py example")
+bplt.show(p)  # open a browser
 
 ### Plot Spectrogram
 plt.pcolormesh(t, f, Zxx, vmin=.0001, vmax=.0005, cmap=plt.cm.gist_heat)

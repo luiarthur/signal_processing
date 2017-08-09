@@ -21,6 +21,8 @@ follow these instructions to install on Ubuntu:
     3. `make install`
 - Remove the two `tar.gz`'s
 
+# To Do:
+Draw interactive piano keyboard on [SVG canvas][4].
 
 # Alternative GUI development for PyQT
 
@@ -30,3 +32,4 @@ Try [this][3]
 [1]: http://www.riverbankcomputing.com/software/sip/download
 [2]: http://www.riverbankcomputing.com/software/pyqt/download
 [3]: https://pythonspot.com/en/pyqt4-gui-tutorial/
+[4]: http://doc.qt.io/qt-4.8/qtwebkit-guide-canvas.html

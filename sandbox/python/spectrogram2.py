@@ -27,12 +27,12 @@ f, t, Zxx = bin_spec(f, t, Zxx)
 #bplt.show(p)  # open a browser
 
 ### Plot Spectrogram
-plt.pcolormesh(t, f, Zxx, vmin=.0005, vmax=.001, cmap=plt.cm.gist_heat)
+plt.pcolormesh(t, np.log(f+1E-6), Zxx, vmin=.0005, vmax=.001, cmap=plt.cm.gist_heat)
 plt.title('STFT Magnitude')
 plt.ylabel('Frequency [Hz]')
-plt.ylim([0, 4200])
+plt.ylim([np.log(f[1]), np.log(f.max())])
 plt.xlabel('Time [sec]')
-plt.yticks(f, pitch(f))
+plt.yticks(np.log(f+1E-6), pitch(f))
 plt.show()
 
 ### Plot Spectrogram built-in

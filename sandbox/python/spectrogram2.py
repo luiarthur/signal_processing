@@ -20,11 +20,11 @@ f, t, Zxx = bin_spec(f, t, Zxx)
 
 ### Plot Spectrogram with bokeh
 # must give a vector of image data for image parameter
-#p = bplt.figure(x_range=(t.min(),t.max()), y_range=(f.min(), f.max()), x_axis_label='time', y_axis_label='Frequency')
-p = bplt.figure(x_range=(t.min(),t.max()), y_range=(np.log(f.min()+1E-6), np.log(f.max())), x_axis_label='time', y_axis_label='Frequency')
-p.image(image=[np.clip(Zxx, .0001, .0005)], x=0, y=0, dw=t.max(), dh=np.log(f.max()), palette="Spectral11")
-bplt.output_file("html/image.html", title="image.py example")
-bplt.show(p)  # open a browser
+##p = bplt.figure(x_range=(t.min(),t.max()), y_range=(f.min(), f.max()), x_axis_label='time', y_axis_label='Frequency')
+#p = bplt.figure(x_range=(t.min(),t.max()), y_range=(np.log(f.min()+1E-6), np.log(f.max())), x_axis_label='time', y_axis_label='Frequency')
+#p.image(image=[np.clip(Zxx, .0001, .0005)], x=0, y=0, dw=t.max(), dh=np.log(f.max()), palette="Spectral11")
+#bplt.output_file("html/image.html", title="image.py example")
+#bplt.show(p)  # open a browser
 
 ### Plot Spectrogram
 plt.pcolormesh(t, f, Zxx, vmin=.0001, vmax=.0005, cmap=plt.cm.gist_heat)

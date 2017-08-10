@@ -48,14 +48,17 @@ def bin_spec(f, t, S, min_freq=27, max_freq=4200, S_max=None):
     # Get pitches corresponding to freqs
     index = pd.Index(closest_piano_freq(f), name='pf')
     df = pd.DataFrame(Z, index=index)
-    Z_new = df.groupby('pf').median()
+    Z_new = df.groupby('pf').max()
     #df.groupby(['pitch']).mean().as_matrix()
     #df.groupby(['pitch']).max().as_matrix()
     f_new = Z_new.index.values
     Z_new = Z_new.as_matrix()
 
     mx = Z_new.max() if S_max is None else S_max
-
     return f_new, t, np.exp( np.log(Z_new) - np.log(mx) )
+
+    # version2:
+    #mm = np.kron(np.ones(Z_new.shape[0]), np.asmatrix(np.max(Z,0)).T)
+    #return f_new, t, np.asarray(np.exp( np.log(Z_new) - np.log(mm.T) ))
 
 

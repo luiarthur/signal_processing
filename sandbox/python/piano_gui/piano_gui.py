@@ -10,11 +10,6 @@ class MyWindow(QtGui.QMainWindow):
         QtGui.QWidget.__init__(self, parent)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        # Insert svgWidget
-        #print self.ui.menuFile.title()
-        svgWidget = QtSvg.QSvgWidget('Zeichen_123.svg')
-        svgWidget.setGeometry(50,50,759,668)
-        svgWidget.show()
 
     def paintEvent(self, e):
         qp = QtGui.QPainter()
@@ -23,35 +18,26 @@ class MyWindow(QtGui.QMainWindow):
         qp.end()
 
     def drawPiano(self, qp):
-        #color = QtGui.QColor(0, 0, 0)
-        #color.setNamedColor('#d4d4d4')
-        #qp.setPen(color)
+        piano_black_key_width = 10
+        piano_black_key_height = 50
 
-        #qp.setBrush(QtGui.QColor(255, 255, 255))
-        #qp.drawRect(10, 50, 10, 60)
+        piano_white_key_width = 5
+        piano_white_key_height = 30
 
-        #qp.setBrush(QtGui.QColor(0, 0, 0))
-        #qp.drawRect(130, 50, 10, 60)
-
-        #qp.setBrush(QtGui.QColor(255, 255, 255))
-        #qp.drawRect(250, 50, 10, 60) 
-        
-        piano_key_width = 10
-        piano_key_height = 50
         piano_xcoord = 50
         piano_ycoord = 50
 
         # Plot White Keys        
         for i in range(52):
-            qp.setBrush(QtGui.QColor(255, 255, 255))
-            qp.drawRect(piano_xcoord + i * piano_key_width , piano_ycoord, 
-                        piano_key_width, piano_key_height) 
+            qp.setBrush(QtGui.QColor(QtCore.Qt.white))
+            qp.drawRect(piano_xcoord + i * piano_black_key_width , piano_ycoord, 
+                        piano_black_key_width, piano_black_key_height) 
 
         # Plot Black Keys        
-        for i in range(52):
-            qp.setBrush(QtGui.QColor(255, 255, 255))
-            qp.drawRect(piano_xcoord + i * piano_key_width , piano_ycoord, 
-                        piano_key_width, piano_key_height) 
+        #for i in range(5):
+        #    qp.setBrush(QtGui.QColor(0, 0, 0))
+        #    qp.drawRect(piano_xcoord + i * piano_key_width , piano_ycoord, 
+        #                piano_key_width, piano_key_height) 
 
 
 if __name__ == "__main__":

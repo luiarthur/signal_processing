@@ -21,6 +21,12 @@ follow these instructions to install on Ubuntu:
     3. `make install`
 - Remove the two `tar.gz`'s
 
+### Install Phonon
+```bash
+sudo apt-get install python-qt4-phonon 
+```
+
+
 # To Do:
 - Draw interactive piano keyboard on [SVG canvas][4].
 

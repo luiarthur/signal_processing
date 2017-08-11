@@ -28,5 +28,5 @@ f, t, Zxx = my_spectrogram(x, fs)
 
 ### Dump Data ###
 np.savetxt('out/Zxx.txt', Zxx, '%.4f')
-np.savetxt('out/f.txt', f, '%.2f')
-np.savetxt('out/t.txt', t, '%.2f')
+np.savetxt('out/f.txt', f, '%.4f')
+np.savetxt('out/t.txt', t, '%.4f')

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+python spectrogram4.py
+python -m SimpleHTTPServer

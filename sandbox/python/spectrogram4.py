@@ -15,16 +15,16 @@ if x.ndim > 1: x = x[:,1]
 
 ### Spectrogram (High resolution)
 f, t, Zxx = my_spectrogram(x, fs)
-f.size
+#f.size
 
 ### Plot Spectrogram
-plt.pcolormesh(t, np.log(f+1E-6), Zxx, vmin=.05, vmax=1, cmap=plt.cm.gist_heat)
-plt.title('STFT Magnitude')
-plt.ylabel('Frequency [Hz]')
-plt.ylim([np.log(f[1]), np.log(f.max())])
-plt.xlabel('Time [sec]')
-plt.yticks(np.log(f+1E-6), pitch(f))
-plt.show()
+#plt.pcolormesh(t, np.log(f+1E-6), Zxx, vmin=.05, vmax=1, cmap=plt.cm.gist_heat)
+#plt.title('STFT Magnitude')
+#plt.ylabel('Frequency [Hz]')
+#plt.ylim([np.log(f[1]), np.log(f.max())])
+#plt.xlabel('Time [sec]')
+#plt.yticks(np.log(f+1E-6), pitch(f))
+#plt.show()
 
 ### Dump Data ###
 np.savetxt('out/Zxx.txt', Zxx, '%.4f')

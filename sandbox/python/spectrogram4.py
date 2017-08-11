@@ -26,3 +26,7 @@ plt.xlabel('Time [sec]')
 plt.yticks(np.log(f+1E-6), pitch(f))
 plt.show()
 
+### Dump Data ###
+np.savetxt('out/Zxx.txt', Zxx, '%.4f')
+np.savetxt('out/f.txt', f, '%.2f')
+np.savetxt('out/t.txt', t, '%.2f')

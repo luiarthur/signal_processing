@@ -1,0 +1,11 @@
+.key-white {
+  fill: white;
+  stroke: black; fill-opacity: 0;
+  stroke-opacity: .3
+}
+
+.key-black {
+  fill: black;
+  stroke: black; 
+}
+

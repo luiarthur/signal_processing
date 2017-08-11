@@ -4,6 +4,7 @@ from scipy.io import wavfile
 from scipy import signal
 import matplotlib.pyplot as plt
 from notes import pitch, piano_freq, freq_dict, my_spectrogram
+import pandas as pd
 
 
 HOME = os.path.expanduser('~')
@@ -30,3 +31,11 @@ f, t, Zxx = my_spectrogram(x, fs)
 np.savetxt('out/Zxx.txt', Zxx, '%.4f')
 np.savetxt('out/f.txt', f, '%.4f')
 np.savetxt('out/t.txt', t, '%.4f')
+
+### Dump JSON ###
+index = [p.replace('#', 's') for p in pitch(f)]
+df = pd.DataFrame(Zxx, index=index, columns=t)
+json = df.to_json() # indexed by time, then by freq.
+open("out/spec.json", 'w+').write('spec = ' + json)
+
+#json[:100]

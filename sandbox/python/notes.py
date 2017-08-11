@@ -9,9 +9,11 @@ name = ["A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#"]
     
 def pitch_unvec(freq):
     h = 12 * np.log(freq/A4) / np.log(2)
-    octave = int(round(h) // 12 + 4)
     n = int(round(h % 12))
     n = n if n < 12 else 0
+    octave = int(round(h) // 12 + 4)
+    if n > 2:
+        octave += 1
     return name[n] + str(octave)
 
 pitch = np.vectorize(pitch_unvec)

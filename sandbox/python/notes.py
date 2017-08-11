@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from scipy import signal
 
 A4 = 440.0
 C0 = A4*pow(2, -4.75)
@@ -53,12 +54,23 @@ def bin_spec(f, t, S, min_freq=27, max_freq=4200, S_max=None):
     #df.groupby(['pitch']).max().as_matrix()
     f_new = Z_new.index.values
     Z_new = Z_new.as_matrix()
+    #Z_new = Z
+    #f_new = f
 
-    mx = Z_new.max() if S_max is None else S_max
-    return f_new, t, np.exp( np.log(Z_new) - np.log(mx) )
+    #mx = Z_new.max() if S_max is None else S_max
+    #return f_new, t, np.exp( np.log(Z_new) - np.log(mx) )
 
     # version2:
-    #mm = np.kron(np.ones(Z_new.shape[0]), np.asmatrix(np.max(Z,0)).T)
-    #return f_new, t, np.asarray(np.exp( np.log(Z_new) - np.log(mm.T) ))
+    mm = np.kron(np.ones(Z_new.shape[0]), np.asmatrix(np.max(Z,0)).T)
+    #print mm
+    #print np.max(Z,0)
+    return f_new, t, np.asarray(np.exp( np.log(Z_new) - np.log(mm.T) ))
 
+
+def my_spectrogram(x, fs, nperseg=2**14, window=None):
+    if window is None:
+        window = signal.get_window('blackman', Nx=nperseg)
+
+    f, t, Zxx = signal.spectrogram(x, fs, nperseg=nperseg, window=window)
+    return bin_spec(f, t, Zxx)
 

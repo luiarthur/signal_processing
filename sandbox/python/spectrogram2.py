@@ -13,10 +13,17 @@ HOME = os.path.expanduser('~')
 (fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
 if x.ndim > 1: x = x[:,1]
 
+#power_of_2 = int(np.log(x.size) / np.log(2))
+#padded_x = np.append(x, np.zeros(2 ** (power_of_2 + 2) - x.size))
 
-w_size = 4096
-f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))
+
+#w_size = 4096 # 2 ** 12
+w_size = 2 ** 14
+#f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))
+#f, t, Zxx = signal.spectrogram(padded_x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))
+f, t, Zxx = signal.spectrogram(x, fs, nperseg=w_size, window=signal.get_window('blackman', Nx=w_size))#, nfft=w_size*4)
 f, t, Zxx = bin_spec(f, t, Zxx)
+f.size
 
 ### Plot Spectrogram with bokeh
 # must give a vector of image data for image parameter
@@ -27,7 +34,7 @@ f, t, Zxx = bin_spec(f, t, Zxx)
 #bplt.show(p)  # open a browser
 
 ### Plot Spectrogram
-plt.pcolormesh(t, np.log(f+1E-6), Zxx, vmin=.0005, vmax=.001, cmap=plt.cm.gist_heat)
+plt.pcolormesh(t, np.log(f+1E-6), Zxx, vmin=0, vmax=1, cmap=plt.cm.gist_heat)
 plt.title('STFT Magnitude')
 plt.ylabel('Frequency [Hz]')
 plt.ylim([np.log(f[1]), np.log(f.max())])

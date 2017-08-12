@@ -69,10 +69,10 @@ def bin_spec(f, t, S, min_freq=27, max_freq=4200, S_max=None):
     return f_new, t, np.asarray(np.exp( np.log(Z_new) - np.log(mm.T) ))
 
 
-def my_spectrogram(x, fs, nperseg=2**14, window=None):
+def my_spectrogram(x, fs, nperseg=2**14, window=None, noverlap=8):
     if window is None:
         window = signal.get_window('blackman', Nx=nperseg)
 
-    f, t, Zxx = signal.spectrogram(x, fs, nperseg=nperseg, window=window)
+    f, t, Zxx = signal.spectrogram(x, fs, nperseg=nperseg, window=window, noverlap=noverlap)
     return bin_spec(f, t, Zxx)
 

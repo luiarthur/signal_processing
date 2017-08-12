@@ -1,7 +1,10 @@
 .key-white {
   fill: white;
-  stroke: black; fill-opacity: 0;
-  stroke-opacity: .3
+  stroke: black;
+  /*
+  fill-opacity: 0;
+  stroke-opacity: .3;
+  */
 }
 
 .key-black {
@@ -9,3 +12,18 @@
   stroke: black; 
 }
 
+audio {
+  background-color: grey
+}
+
+audio::-internal-media-controls-download-button {
+    display:none;
+}
+
+audio::-webkit-media-controls-enclosure {
+    overflow:hidden;
+}
+
+audio::-webkit-media-controls-panel {
+    width: calc(100% + 30px); /* Adjust as needed */
+}

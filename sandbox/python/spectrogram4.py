@@ -10,12 +10,13 @@ import pandas as pd
 HOME = os.path.expanduser('~')
 
 ### Read a wavfile
-(fs, x) = wavfile.read(HOME+"/wav/embraceableYou.wav")
+(fs, x) = wavfile.read(HOME+"/wav/embraceableYou_mono.wav")
 if x.ndim > 1: x = x[:,1]
 
 
+
 ### Spectrogram (High resolution)
-f, t, Zxx = my_spectrogram(x, fs)
+f, t, Zxx = my_spectrogram(x, fs, nperseg=2**13)
 #f.size
 
 ### Plot Spectrogram
@@ -30,12 +31,13 @@ f, t, Zxx = my_spectrogram(x, fs)
 ### Dump Data ###
 np.savetxt('out/Zxx.txt', Zxx, '%.4f')
 np.savetxt('out/f.txt', f, '%.4f')
-np.savetxt('out/t.txt', t, '%.4f')
+np.savetxt('out/t.txt', t, '%.2f')
 
 ### Dump JSON ###
 index = [p.replace('#', 's') for p in pitch(f)]
-df = pd.DataFrame(Zxx, index=index, columns=t)
+df = pd.DataFrame(Zxx, index=index, columns=np.round(t,2))
 json = df.to_json() # indexed by time, then by freq.
-open("out/spec.json", 'w+').write('spec = ' + json)
+json = "[" + json + "]"
+open("out/spec.json", 'w+').write(json)
 
 #json[:100]

@@ -5,7 +5,7 @@ function makePiano(tag) {
   var whiteKeyHeight = +svgPiano.attr("height")
   var whiteKeyWidth = +svgPiano.attr("width") / numWhiteKeys
 
-  var blackKeyHeight =  +svgPiano.attr("height") *.6
+  var blackKeyHeight =  +svgPiano.attr("height") *.7
   var blackKeyWidth =  +svgPiano.attr("width") / numWhiteKeys / 2
 
   var letterNames = ['A', 'B', 'C', 'D', 'E', 'F', 'G']

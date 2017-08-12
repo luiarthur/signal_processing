@@ -12,7 +12,13 @@
 Left off with `spectrogram4.py`, `bokeh/index.html`, `arcPiano.html`.
 
 Next thing: 
-- [ ] use D3.js
-- [ ] make a piano keyboard (flat)
-- [ ] read text files (in `out/`) using D3.js
-- [ ] when the audio plays at time `t`, highlight the keyboard at the key.
+- [x] use D3.js
+- [x] make a piano keyboard (flat)
+- [x] read text files (in `out/`) using D3.js
+- [x] when the audio plays at time `t`, highlight the keyboard at the key.
+
+# 11 August
+
+Next thing: 
+- [ ] Make a standalone repo
+- [ ] make it somewhat pretty
